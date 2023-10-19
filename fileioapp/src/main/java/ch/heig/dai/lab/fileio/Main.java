@@ -2,6 +2,7 @@ package ch.heig.dai.lab.fileio;
 
 import java.io.File;
 import java.nio.charset.Charset;
+import java.nio.charset.StandardCharsets;
 
 import ch.heig.dai.lab.fileio.badisnt.*;
 
@@ -56,7 +57,7 @@ public class Main {
                 String outputName = inputFile.getAbsolutePath() + ".processed";
 
                 File outputFile = new File(outputName);
-                fileRW.writeFile(outputFile, transformedContent, encoding);
+                fileRW.writeFile(outputFile, transformedContent, StandardCharsets.UTF_8);
 
             } catch (Exception e) {
                 System.out.println("Exception: " + e);
