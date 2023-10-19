@@ -36,9 +36,6 @@ public class Main {
         EncodingSelector encodingSelector = new EncodingSelector();
         Transformer transformer = new Transformer(newName, wordsPerLine);
 
-        //Create new folder for processed files
-        new File(folder+"\\Processed").mkdir();
-
         while (true) {
             try {
                 File inputFile = fileExplorer.getNewFile();
@@ -56,10 +53,7 @@ public class Main {
                 
                 String transformedContent = wrapped;
                 
-                //Creating output file name with extension
-                String inputName = inputFile.getAbsolutePath();
-
-                String outputName = folder + "\\Processed\\" + inputName.substring(inputName.lastIndexOf("\\"),inputName.length());
+                String outputName = inputFile.getAbsolutePath() + ".processed";
 
                 File outputFile = new File(outputName);
                 fileRW.writeFile(outputFile, transformedContent, encoding);
