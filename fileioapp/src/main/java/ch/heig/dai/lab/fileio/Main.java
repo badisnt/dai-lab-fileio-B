@@ -1,13 +1,12 @@
 package ch.heig.dai.lab.fileio;
 
 import java.io.File;
+import java.nio.charset.Charset;
 
-// *** TODO: Change this to import your own package ***
-import ch.heig.dai.lab.fileio.jehrensb.*;
+import ch.heig.dai.lab.fileio.badisnt.*;
 
 public class Main {
-    // *** TODO: Change this to your own name ***
-    private static final String newName = "Jean-Claude Van Damme";
+    private static final String newName = "Badis Machraoui";
 
     /**
      * Main method to transform files in a folder.
@@ -31,11 +30,39 @@ public class Main {
         String folder = args[0];
         int wordsPerLine = Integer.parseInt(args[1]);
         System.out.println("Application started, reading folder " + folder + "...");
-        // TODO: implement the main method here
+        
+        FileExplorer fileExplorer = new FileExplorer(folder);
+        FileReaderWriter fileRW = new FileReaderWriter();
+        EncodingSelector encodingSelector = new EncodingSelector();
+        Transformer transformer = new Transformer(newName, wordsPerLine);
+
+        //Create new folder for processed files
+        new File(folder+"\\Processed").mkdir();
 
         while (true) {
             try {
-                // TODO: loop over all files
+                File inputFile = fileExplorer.getNewFile();
+                if (inputFile==null) break;
+
+                Charset encoding = encodingSelector.getEncoding(inputFile);
+                if (encoding==null) continue;
+
+                String content = fileRW.readFile(inputFile, encoding);
+                if (content==null) continue;
+
+                String chuckified = transformer.replaceChuck(content);
+                String capitalized = transformer.capitalizeWords(chuckified);
+                String wrapped = transformer.wrapAndNumberLines(capitalized);
+                
+                String transformedContent = wrapped;
+                
+                //Creating output file name with extension
+                String inputName = inputFile.getAbsolutePath();
+
+                String outputName = folder + "\\Processed\\" + inputName.substring(inputName.lastIndexOf("\\"),inputName.length());
+
+                File outputFile = new File(outputName);
+                fileRW.writeFile(outputFile, transformedContent, encoding);
 
             } catch (Exception e) {
                 System.out.println("Exception: " + e);
